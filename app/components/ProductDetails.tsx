@@ -1,12 +1,18 @@
 "use client";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
-
+import { CartContext } from "../context/CartContext";
 
 const ProductDetails = ({ product }: any) => {
+  
   const [index, setIndex] = useState(0);
+  // import quantityincreasing quantity and decrease quantity by use context
+  const { cartItem, addProduct, quantity, increaseQuantity, decreaseQuantity }: any =
+    useContext(CartContext);
+    console.log(cartItem);
+    
   return (
     <div className="product-details-section">
       <div className="product-details-container">
@@ -60,16 +66,18 @@ const ProductDetails = ({ product }: any) => {
           <div className="flex gap-2 items-center">
             <h3>Quantity</h3>
             <p className="quantity-desc flex items-center border-black">
-              <span className="minus">
+              <span className="minus" onClick={decreaseQuantity}>
                 <AiOutlineMinus />
               </span>
-              <span className="num">1</span>
-              <span className="plus">
-                <AiOutlinePlus/>
+              <span className="num">{quantity}</span>
+              <span className="plus" onClick={increaseQuantity}>
+                <AiOutlinePlus />
               </span>
             </p>
           </div>
-          <button className="btn">Add To Cart</button>
+          <button className="btn add-to-cart"
+          onClick={()=>addProduct(product,quantity)}
+          >Add To Cart</button>
         </div>
       </div>
     </div>

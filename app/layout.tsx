@@ -5,7 +5,6 @@ import Navbar from "./components/Navbar";
 import { CartProvider } from "./context/CartContext";
 import Products from "./components/Products";
 
-
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -32,9 +31,8 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Navbar />
-        
         <CartProvider>
+          <Navbar />
           {children}
         </CartProvider>
       </body>
