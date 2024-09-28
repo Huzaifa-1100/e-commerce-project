@@ -1,8 +1,36 @@
 "use client";
-import { createContext, useState, useContext } from "react";
+import { createContext, useState } from "react";
 
-export const CartContext = createContext({});
+// Define the interface for a product item in the cart
+interface CartItem {
+  _id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  imageUrl?: string; // You can add more properties as needed
+}
 
+// Define the context structure
+interface CartContextType {
+  showCart: boolean;
+  setShowCart: (value: boolean) => void;
+  quantity: number;
+  increaseQuantity: () => void;
+  decreaseQuantity: () => void;
+  addProduct: (product: CartItem, quantity: number) => void;
+  cartItem: CartItem[];
+  totalQuantity: number;
+  totalPrice: number;
+  toggleCartItemQty: (id: string, value: string) => void;
+  onRemove: (product: CartItem) => void;
+}
+
+// Create the context and provide the initial state
+export const CartContext = createContext<CartContextType | undefined>(
+  undefined
+);
+
+// Define the provider component to manage the cart state
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   // Define the state to track if the cart is shown or hidden
   const [showCart, setShowCart] = useState(false);
@@ -11,7 +39,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [quantity, setQuantity] = useState(1);
 
   // Define the state to sho the cart item
-  const [cartItem, setCartItem] = useState<any>([]);
+  const [cartItem, setCartItem] = useState<CartItem[]>([]);
 
   // Define the state to track the total quantity of items in the cart
   const [totalQuantity, setTotalQuantity] = useState(0);
@@ -60,36 +88,42 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   // Define the function to remove a product from the cart
-  const toggleCartItemQty = (id:any, value:any) =>{
-    let foundProduct = cartItem.find((item:any)=> item._id === id);
-    const index = cartItem.findIndex((product:any)=>product._id === id);
+  const toggleCartItemQty = (id: any, value: any) => {
+    let foundProduct = cartItem.find((item: any) => item._id === id);
+    const index = cartItem.findIndex((product: any) => product._id === id);
     const updatedCartItems = [...cartItem];
 
-    if(value === 'plus'){
-        updatedCartItems[index] = { ...updatedCartItems[index], quantity:updatedCartItems[index].quantity + 1 }
+    if (value === "plus") {
+      updatedCartItems[index] = {
+        ...updatedCartItems[index],
+        quantity: updatedCartItems[index].quantity + 1,
+      };
+      setCartItem([...updatedCartItems]);
+      setTotalPrice((prevTotalPrice) => prevTotalPrice + foundProduct!.price);
+      setTotalQuantity((prevTotalQty) => prevTotalQty + 1);
+    } else if (value === "minus") {
+      if (foundProduct!.quantity > 1) {
+        updatedCartItems[index] = {
+          ...updatedCartItems[index],
+          quantity: updatedCartItems[index].quantity - 1,
+        };
         setCartItem([...updatedCartItems]);
-        setTotalPrice((prevTotalPrice)=> prevTotalPrice + foundProduct.price);
-        setTotalQuantity((prevTotalQty) => prevTotalQty + 1)
-
-    }else if(value === 'minus'){
-        if(foundProduct.quantity > 1 ){
-            updatedCartItems[index] = { ...updatedCartItems[index], quantity:updatedCartItems[index].quantity - 1 }
-            setCartItem([...updatedCartItems]);
-            setTotalPrice((prevTotalPrice)=> prevTotalPrice - foundProduct.price);
-            setTotalQuantity((prevTotalQty) => prevTotalQty - 1);
-        }
-
+        setTotalPrice((prevTotalPrice) => prevTotalPrice - foundProduct!.price);
+        setTotalQuantity((prevTotalQty) => prevTotalQty - 1);
+      }
     }
+  };
 
-}
-
-  const onRemove = (product: any) => {
-    let foundProduct = cartItem.find((item: any) => item._id === product._id);
-    const newCartItems = cartItem.filter((item:any) => item._id !== product._id)
+  // Define the state to remove a product from the cart
+  const onRemove = (product: CartItem) => {
+    let foundProduct = cartItem.find((item) => item._id === product._id);
+    const newCartItems = cartItem.filter((item) => item._id !== product._id);
 
     setCartItem(newCartItems);
-    setTotalPrice((prevTotal) => prevTotal - foundProduct.price*foundProduct.quantity);
-    setTotalQuantity((prevTotalQty) => prevTotalQty - foundProduct.quantity)
+    setTotalPrice(
+      (prevTotal) => prevTotal - foundProduct!.price * foundProduct!.quantity
+    );
+    setTotalQuantity((prevTotalQty) => prevTotalQty - foundProduct!.quantity);
   };
 
   // Define the state to track the cart items

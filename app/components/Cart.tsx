@@ -3,9 +3,9 @@ import { AiOutlineLeft, AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import { CartContext } from "../context/CartContext";
 import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
-import { ImageLoader } from "next/image";
 import { TiDeleteOutline } from "react-icons/ti";
-import Products from "./Products";
+
+
 const Cart = () => {
   // Get cart context state using useContext hook
   const {
