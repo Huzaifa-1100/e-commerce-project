@@ -3,7 +3,29 @@ import React from "react";
 import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
 
-const Card = ({ product }: any) => {
+// Define the interface for product
+interface Product {
+  name: string;
+  price: number;
+  slug: {
+    current: string;
+  };
+  images: {
+    _key: string;
+    _type: string;
+    asset: {
+      _ref: string;
+      _type: string;
+    };
+  }[];
+}
+
+// Define the props for the Card component
+interface CardProps {
+  product: Product;
+}
+
+const Card = ({ product }: CardProps) => {
   return (
     <div>
       <Link href={`/product/${product.slug.current}`}>
@@ -12,7 +34,7 @@ const Card = ({ product }: any) => {
             src={urlFor(product.images && product.images[0])
               .width(200)
               .url()}
-            alt={product.slug}
+            alt={product.name}
             width={220}
             height={100}
             className="object-cover h-auto w-auto mx-auto p-2"

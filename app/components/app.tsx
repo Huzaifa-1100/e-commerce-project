@@ -1,6 +1,14 @@
 import { CartProvider } from "../context/CartContext";
+import { AppProps } from 'next/app';
 
-function MyApp({ Component, pageProps }:any) {
+interface CartProvider {
+  name: string;
+  price: number;
+  slug: { current: string };
+  images: { url: string }[];
+}
+
+function MyApp({ Component, pageProps }:AppProps) {
   return (
     <CartProvider>
       <Component {...pageProps} />

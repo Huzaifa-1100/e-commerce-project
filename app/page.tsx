@@ -4,13 +4,13 @@ import Hero from "./components/Hero";
 import Products from "./components/Products";
 
 export default async function Home() {
+  // Fetch products from Sanity
   const products = await client.fetch(groq`*[_type=="product"]{
   name,
   price,
   slug,
   images
 }`);
-  
 
   return (
     <>
