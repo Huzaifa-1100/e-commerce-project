@@ -60,33 +60,28 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   // Define the function to remove a product from the cart
-  const toggleCartItemQty = (id: any, value: any) => {
-    // Find the product in the cart item array based on the provided id
-    let foundProduct = cartItem.find((item: any) => item._id);
-
-    const index = cartItem.findIndex((product: any) => product._id === id);
-
+  const toggleCartItemQty = (id:any, value:any) =>{
+    let foundProduct = cartItem.find((item:any)=> item._id === id);
+    const index = cartItem.findIndex((product:any)=>product._id === id);
     const updatedCartItems = [...cartItem];
 
-    if (value === "plus") {
-      updatedCartItems[index] = {
-        ...updatedCartItems[index],
-        quantity: updatedCartItems[index].quantity + 1,
-      };
-      setCartItem([...updatedCartItems]);
-      setTotalPrice((prevTotalPrice) => prevTotalPrice + foundProduct.price);
-      setTotalQuantity((prevTotalQuantity) => prevTotalQuantity + 1);
-    } else if (value === "minus") {
-      if (foundProduct.quantity > 1)
-        updatedCartItems[index] = {
-          ...updatedCartItems[index],
-          quantity: updatedCartItems[index].quantity - 1,
-        };
-      setCartItem([...updatedCartItems]);
-      setTotalPrice((prevTotalPrice) => prevTotalPrice - foundProduct.price);
-      setTotalQuantity((prevTotalQty) => prevTotalQty - 1);
+    if(value === 'plus'){
+        updatedCartItems[index] = { ...updatedCartItems[index], quantity:updatedCartItems[index].quantity + 1 }
+        setCartItem([...updatedCartItems]);
+        setTotalPrice((prevTotalPrice)=> prevTotalPrice + foundProduct.price);
+        setTotalQuantity((prevTotalQty) => prevTotalQty + 1)
+
+    }else if(value === 'minus'){
+        if(foundProduct.quantity > 1 ){
+            updatedCartItems[index] = { ...updatedCartItems[index], quantity:updatedCartItems[index].quantity - 1 }
+            setCartItem([...updatedCartItems]);
+            setTotalPrice((prevTotalPrice)=> prevTotalPrice - foundProduct.price);
+            setTotalQuantity((prevTotalQty) => prevTotalQty - 1);
+        }
+
     }
-  };
+
+}
 
   const onRemove = (product: any) => {
     let foundProduct = cartItem.find((item: any) => item._id === product._id);

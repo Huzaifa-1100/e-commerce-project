@@ -10,7 +10,7 @@ const page = async () => {
   const products = await client.fetch(groq`*[_type=="product"]`);
   
   const product = products.find((p:any) => p.slug.current === slug);
-  console.log(product);
+ 
   
   return (
     <>

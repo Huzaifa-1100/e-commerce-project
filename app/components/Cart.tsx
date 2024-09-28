@@ -5,15 +5,41 @@ import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
 import { ImageLoader } from "next/image";
 import { TiDeleteOutline } from "react-icons/ti";
+import Products from "./Products";
 const Cart = () => {
   // Get cart context state using useContext hook
-  const { onRemove, toggleCartItemQty, totalPrice, totalQuantity, cartItem, showCart, setShowCart }: any =
-    useContext(CartContext);
+  const {
+    onRemove,
+    toggleCartItemQty,
+    totalPrice,
+    totalQuantity,
+    cartItem,
+    showCart,
+    setShowCart,
+  }: any = useContext(CartContext);
   const obj = useContext(CartContext);
 
   // function to handle cart state change on click button
   const handleClose = () => {
     setShowCart(!showCart);
+  };
+
+  const handleCheckout = async () => {
+    try {
+      const response = await fetch("/api/checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ products: cartItem }),
+      });
+      const data = await response.json();
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    } catch (error) {
+      console.error("Error during checkout", error);
+    }
   };
 
   return (
@@ -42,15 +68,25 @@ const Cart = () => {
                 </div>
                 <div className="flex bottom">
                   <div className="quantity-desc">
-                    <span className="minus" onClick={()=> toggleCartItemQty(product._id, `minus`)} >
+                    <span
+                      className="minus"
+                      onClick={() => toggleCartItemQty(product._id, `minus`)}
+                    >
                       <AiOutlineMinus />
                     </span>
                     <span className="num">{product.quantity}</span>
-                    <span className="plus" onClick={()=> toggleCartItemQty(product._id, `plus`)}> 
+                    <span
+                      className="plus"
+                      onClick={() => toggleCartItemQty(product._id, `plus`)}
+                    >
                       <AiOutlinePlus />
                     </span>
                   </div>
-                  <button type="button" className="remove-item" onClick={()=> onRemove(product)}>
+                  <button
+                    type="button"
+                    className="remove-item"
+                    onClick={() => onRemove(product)}
+                  >
                     <TiDeleteOutline />
                   </button>
                 </div>
@@ -59,20 +95,23 @@ const Cart = () => {
           ))}
         </div>
 
-        {cartItem.length > 0 && 
+        {cartItem.length > 0 && (
           <div className="cart-bottom ">
             <div className="total">
               <h3>Subtotal</h3>
               <h3>${totalPrice}</h3>
             </div>
             <div className="btn-container">
-              <button type="button" className="checkout-btn">
+              <button
+                onClick={handleCheckout}
+                type="button"
+                className="checkout-btn"
+              >
                 Pay with stripe
               </button>
             </div>
           </div>
-        }
-        
+        )}
       </div>
     </div>
   );

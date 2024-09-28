@@ -11,7 +11,7 @@ const ProductDetails = ({ product }: any) => {
   // import quantityincreasing quantity and decrease quantity by use context
   const { cartItem, addProduct, quantity, increaseQuantity, decreaseQuantity }: any =
     useContext(CartContext);
-    console.log(cartItem);
+   
     
   return (
     <div className="product-details-section">
