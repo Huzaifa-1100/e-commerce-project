@@ -1,31 +1,25 @@
 import { NextResponse } from "next/server";
+import Stripe from "stripe"; // Use import instead of require
 
-
-interface ProductType {
-  name: string;
-  price: number;
-  slug: { current: string };
-  images: { url: string }[];
-}
-
-
-// environment variables
-const stripe = require("stripe")(process.env.NEXT_STRIPE_SECRET_KEY);
+// Initialize Stripe with your secret key
+const stripe = new Stripe(process.env.NEXT_STRIPE_SECRET_KEY!, {
+  apiVersion: "2024-06-20", // Specify the API version you're using
+});
 
 export const POST = async (request: Request) => {
   const { products } = await request.json();
   let activeProducts = await stripe.products.list({ active: true });
- 
+
   try {
-    //  1. Find products from stripe that matches products from cart.
+    // 1. Find products from Stripe that match products from the cart.
     for (const product of products) {
-      const matchedProducts = activeProducts?.data?.find(
-        (stripeProduct: ProductType) =>
+      const matchedProduct = activeProducts.data.find(
+        (stripeProduct) =>
           stripeProduct.name.toLowerCase() === product.name.toLowerCase()
       );
 
-      //  2. If product didn't exist in Stripe, then add this product to stripe.
-      if (matchedProducts == undefined) {
+      // 2. If the product didn't exist in Stripe, then add this product to Stripe.
+      if (matchedProduct === undefined) {
         await stripe.products.create({
           name: product.name,
           default_price_data: {
@@ -36,32 +30,39 @@ export const POST = async (request: Request) => {
       }
     }
   } catch (error) {
-    console.log("Error in creating a new product", error);
+    console.error("Error in creating a new product", error);
     throw error;
   }
 
-  //  3. Once the new product has been added to stripe, do FETCH Products again with updated products from stripe
+  // 3. Once the new product has been added to Stripe, fetch products again with updated products from Stripe
   activeProducts = await stripe.products.list({ active: true });
-  const stripeProducts = [];
+  const stripeProducts: Stripe.Checkout.SessionCreateParams.LineItem[] = []; // Specify the type here
 
   for (const product of products) {
-    const stripeProduct = activeProducts?.data?.find(
-      (stripeProduct: ProductType) =>
+    const stripeProduct = activeProducts.data.find(
+      (stripeProduct) =>
         stripeProduct.name.toLowerCase() === product.name.toLowerCase()
     );
 
-    if (stripeProduct) {
+    // Ensure that stripeProduct and its default_price exist
+    if (stripeProduct && stripeProduct.default_price) {
+      // Check if default_price is an object and get the ID
+      const priceId = typeof stripeProduct.default_price === 'string' 
+        ? stripeProduct.default_price 
+        : stripeProduct.default_price.id;
+
       stripeProducts.push({
-        // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-        price: stripeProduct?.default_price,
+        price: priceId, // Use the price ID as a string
         quantity: product.quantity,
       });
+    } else {
+      console.warn(`Product ${product.name} not found or has no default price.`);
     }
   }
 
   // Create Checkout Sessions from body params.
   const session = await stripe.checkout.sessions.create({
-    line_items: stripeProducts,
+    line_items: stripeProducts, 
     mode: "payment",
     success_url: `http://localhost:3000/success`,
     cancel_url: `http://localhost:3000/`,

@@ -2,14 +2,7 @@ import React from "react";
 import { groq } from "next-sanity";
 import { client } from "@/sanity/lib/client";
 
-import Card from "./Card";
-
-interface ProductType {
-  name: string;
-  price: number;
-  slug: { current: string };
-  images: { url: string }[];
-}
+import Card, { Product } from "./Card";
 
 const Products = async () => {
   const products = await client.fetch(groq`*[_type=="product"]{
@@ -27,7 +20,7 @@ const Products = async () => {
           <h1>Enjouy up to 50%</h1>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 mt-6">
-          {products.map((product: ProductType, index: number) => (
+          {products.map((product: Product, index: number) => (
             <Card key={index} product={product} />
           ))}
         </div>

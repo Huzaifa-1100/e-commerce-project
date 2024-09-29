@@ -60,7 +60,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   // Define the function to add a product to the cart
-  const addProduct = (product: any, quantity: number) => {
+  const addProduct = (product: CartItem, quantity: number) => {
     // Update the total quantity of items in the cart
     setTotalQuantity((prev) => prev + quantity);
 
@@ -69,11 +69,11 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
     // Check if the product already exists in the cart and update the quantity if true, otherwise add a new product
     const checkProductInCart = cartItem.find(
-      (item: any) => item._id === product._id
+      (item: CartItem) => item._id === product._id
     );
 
     if (checkProductInCart) {
-      const updatedCartItems = cartItem.map((cartProduct: any) => {
+      const updatedCartItems = cartItem.map((cartProduct: CartItem) => {
         if (cartProduct._id === product._id) {
           return { ...cartProduct, quantity: cartProduct.quantity + quantity };
         } else {
@@ -88,9 +88,9 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   // Define the function to remove a product from the cart
-  const toggleCartItemQty = (id: any, value: any) => {
-    let foundProduct = cartItem.find((item: any) => item._id === id);
-    const index = cartItem.findIndex((product: any) => product._id === id);
+  const toggleCartItemQty = (id: string, value: string) => {
+    const foundProduct = cartItem.find((item: CartItem) => item._id === id);
+    const index = cartItem.findIndex((product: CartItem) => product._id === id);
     const updatedCartItems = [...cartItem];
 
     if (value === "plus") {
@@ -116,7 +116,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
   // Define the state to remove a product from the cart
   const onRemove = (product: CartItem) => {
-    let foundProduct = cartItem.find((item) => item._id === product._id);
+    const foundProduct = cartItem.find((item) => item._id === product._id);
     const newCartItems = cartItem.filter((item) => item._id !== product._id);
 
     setCartItem(newCartItems);

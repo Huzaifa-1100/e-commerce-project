@@ -4,9 +4,12 @@ import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
 
 // Define the interface for product
-interface Product {
+export interface Product {
   name: string;
   price: number;
+  _id: string;
+  quantity: number;
+  description: string;
   slug: {
     current: string;
   };

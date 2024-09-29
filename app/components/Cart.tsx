@@ -7,14 +7,13 @@ import { TiDeleteOutline } from "react-icons/ti";
 
 // Define the interface for a product item in the cart
 interface CartItem {
+  images: string[];
   _id: string;
   name: string;
   price: number;
   quantity: number;
   imageUrl?: string; // You can add more properties as needed
 }
-
-
 
 // Define the context structure
 interface CartContextType {
@@ -42,8 +41,8 @@ const Cart = () => {
     cartItem,
     showCart,
     setShowCart,
-  } = useContext(CartContext) as CartContextType;
-  const obj = useContext(CartContext);
+  } = useContext(CartContext) as unknown as CartContextType;
+  useContext(CartContext);
 
   // function to handle cart state change on click button
   const handleClose = () => {
@@ -78,7 +77,7 @@ const Cart = () => {
           <span className="cart-num-items">{totalQuantity}</span>
         </button>
         <div className="product-container">
-          {cartItem.map((product: any) => (
+          {cartItem.map((product: CartItem) => (
             <div key={product._id} className="product">
               <Image
                 loader={() => urlFor(product.images[0]).width(500).url()} // Loader should return a URL
@@ -122,7 +121,6 @@ const Cart = () => {
           ))}
         </div>
 
-        
         {/* {cartItem.length === 0 && <h3 className="text-red-600 font-bold text-xl">Your cart is empty! Please add some products.</h3>} */}
         {cartItem.length > 0 && (
           <div className="cart-bottom ">
