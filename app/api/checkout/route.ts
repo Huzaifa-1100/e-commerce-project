@@ -9,7 +9,7 @@ interface ProductType {
 }
 
 
-// Import your environment variables
+// environment variables
 const stripe = require("stripe")(process.env.NEXT_STRIPE_SECRET_KEY);
 
 export const POST = async (request: Request) => {
@@ -42,11 +42,11 @@ export const POST = async (request: Request) => {
 
   //  3. Once the new product has been added to stripe, do FETCH Products again with updated products from stripe
   activeProducts = await stripe.products.list({ active: true });
-  let stripeProducts = [];
+  const stripeProducts = [];
 
   for (const product of products) {
     const stripeProduct = activeProducts?.data?.find(
-      (stripeProduct: any) =>
+      (stripeProduct: ProductType) =>
         stripeProduct.name.toLowerCase() === product.name.toLowerCase()
     );
 

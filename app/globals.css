@@ -88,7 +88,7 @@
 }
 
 .cart-container{
-  @apply border h-[100vh]  w-[600px] bg-white  float-right px-[40px] py-[50px] relative;
+  @apply border h-[100vh]  md:w-[600px] bg-white  float-right px-[40px] py-[50px] relative;
 }
 
 .cart-heading{
@@ -105,7 +105,7 @@
 }
 
 .product-container{
-  @apply mt-[15px] overflow-auto max-h-[60vh] px-[20px] py-[10px];
+  @apply  mt-[15px] overflow-auto max-h-[60vh] px-[20px] py-[10px] ;
 }
 
 .empty-cart{

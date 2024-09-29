@@ -5,7 +5,33 @@ import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
 import { TiDeleteOutline } from "react-icons/ti";
 
+// Define the interface for a product item in the cart
+interface CartItem {
+  _id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  imageUrl?: string; // You can add more properties as needed
+}
 
+
+
+// Define the context structure
+interface CartContextType {
+  showCart: boolean;
+  setShowCart: (value: boolean) => void;
+  quantity: number;
+  increaseQuantity: () => void;
+  decreaseQuantity: () => void;
+  addProduct: (product: CartItem, quantity: number) => void;
+  cartItem: CartItem[];
+  totalQuantity: number;
+  totalPrice: number;
+  toggleCartItemQty: (id: string, value: string) => void;
+  onRemove: (product: CartItem) => void;
+}
+
+// Define the Cart component
 const Cart = () => {
   // Get cart context state using useContext hook
   const {
@@ -16,7 +42,7 @@ const Cart = () => {
     cartItem,
     showCart,
     setShowCart,
-  }: any = useContext(CartContext);
+  } = useContext(CartContext) as CartContextType;
   const obj = useContext(CartContext);
 
   // function to handle cart state change on click button
@@ -24,6 +50,7 @@ const Cart = () => {
     setShowCart(!showCart);
   };
 
+  // function to handle quantity change for a product
   const handleCheckout = async () => {
     try {
       const response = await fetch("/api/checkout", {
@@ -95,6 +122,8 @@ const Cart = () => {
           ))}
         </div>
 
+        
+        {/* {cartItem.length === 0 && <h3 className="text-red-600 font-bold text-xl">Your cart is empty! Please add some products.</h3>} */}
         {cartItem.length > 0 && (
           <div className="cart-bottom ">
             <div className="total">
