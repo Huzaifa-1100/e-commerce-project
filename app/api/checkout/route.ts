@@ -64,8 +64,8 @@ export const POST = async (request: Request) => {
   const session = await stripe.checkout.sessions.create({
     line_items: stripeProducts, 
     mode: "payment",
-    success_url: `http://localhost:3000/success`,
-    cancel_url: `http://localhost:3000/`,
+    success_url: `https://e-commerce-project-liard.vercel.app/success`,
+    cancel_url: `https://e-commerce-project-liard.vercel.app/`,
   });
 
   return NextResponse.json({
