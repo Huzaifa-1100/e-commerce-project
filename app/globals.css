@@ -47,7 +47,7 @@
 }
 
 .small-images-container{
-  @apply flex flex-col sm:flex-row gap-[5px] pt-10;
+  @apply flex flex-col sm:flex-row md:w-auto gap-[5px] pt-10;
 }
 
 .quantity-desc{
@@ -105,7 +105,7 @@
 }
 
 .product-container{
-  @apply  mt-[15px] overflow-auto max-h-[60vh] px-[20px] py-[10px] ;
+  @apply  mt-[15px] overflow-auto h-[53vh] md:max-h-[60vh] px-[20px] py-[10px] ;
 }
 
 .empty-cart{
@@ -144,7 +144,11 @@
 }
 
 .product .cart-product-image{
-  @apply  w-[180px] h-[150px] rounded-[15px] bg-[#ebebeb];
+  @apply  w-[180px] h-auto rounded-[15px] bg-[#ebebeb];
+}
+
+.product-Image-amination{
+  @apply transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110  duration-300
 }
 
 .item-desc .flex{
@@ -203,7 +207,7 @@
   bottom: 0px;
   right: 5px;
   width: 100%;
-  padding: 30px 65px;
+  padding: 20px 30px;
 }
 .total {
   @apply flex w-full justify-between py-3;
@@ -211,6 +215,7 @@
 
 .total h3{
   font-size: 22px;
+
 }
 
 .btn-container{
@@ -218,7 +223,7 @@
 } 
 
 .checkout-btn{
-  @apply  text-black p-5 text-xl font-bold w-full border border-4 border-black;
+  @apply  text-black p-5 text-xl font-bold w-full  border-4 border-black;
 }
 
 .checkout-btn:hover{

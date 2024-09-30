@@ -32,7 +32,7 @@ const Card = ({ product }: CardProps) => {
   return (
     <div>
       <Link href={`/product/${product.slug.current}`}>
-        <div className="bg-white pt-10 drop-shadow-md rounded-lg overflow-hidden">
+        <div className="bg-white pt-10 drop-shadow-md rounded-lg overflow-hidden product-Image-amination h-full">
           <Image
             src={urlFor(product.images && product.images[0])
               .width(200)

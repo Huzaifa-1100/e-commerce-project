@@ -85,7 +85,7 @@ const Cart = () => {
                 alt={product.name[0]}
                 width={200}
                 height={200}
-                className="object-cover"
+                className="cart-product-image"
               />
               <div className="item-desc">
                 <div className="flex top">
@@ -121,9 +121,9 @@ const Cart = () => {
           ))}
         </div>
 
-        {/* {cartItem.length === 0 && <h3 className="text-red-600 font-bold text-xl">Your cart is empty! Please add some products.</h3>} */}
+        
         {cartItem.length > 0 && (
-          <div className="cart-bottom ">
+          <div className="cart-bottom  ">
             <div className="total">
               <h3>Subtotal</h3>
               <h3>${totalPrice}</h3>

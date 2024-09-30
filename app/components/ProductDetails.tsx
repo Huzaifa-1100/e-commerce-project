@@ -97,7 +97,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product }) => {
                   alt={product.name} // Use the product name as the alt text
                   width={220}
                   height={220}
-                  className={`h-32 mx-auto border rounded hover:cursor-pointer ${index === i ? 'active' : ''}`}
+                  className={`product-Image-amination h-32 w-32 mx-auto border rounded shadow-md hover:cursor-pointer hover:shadow-xl ${index === i ? 'active' : ''}`}
                   onClick={() => setIndex(i)}
                 />
               );
