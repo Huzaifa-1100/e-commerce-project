@@ -4,6 +4,7 @@ import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import { CartContext } from "../context/CartContext";
+import useToast from "quick-toastify";
 
 
 // Define the interface for a product item in the cart
@@ -57,11 +58,14 @@ export interface ProductDetailsProps {
 
 // Define the ProductDetails component with proper typing
 const ProductDetails: React.FC<ProductDetailsProps> = ({ product }) => {
+  const { toastComponent, triggerToast } = useToast("bottom-left");
+
   const [index, setIndex] = useState<number>(0);
 
   // Use the CartContext with the appropriate type
   const { addProduct, quantity, increaseQuantity, decreaseQuantity } =
     useContext(CartContext) as CartContextType;
+    
 
   // Ensure that we extract the correct URL string from the image object
   const currentImageUrl = product.images && product.images[index] 
@@ -124,13 +128,25 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product }) => {
             </p>
           </div>
           <button
-            className="btn add-to-cart"
-            onClick={() => addProduct(product, quantity)}
-          >
-            Add To Cart
-          </button>
+  className="btn transition-all duration-500 add-to-cart"
+  onClick={() => {
+    addProduct(product, quantity); 
+    triggerToast({
+      type: "success",
+      message: "Your product has been added successfully",
+      duration: 5000,
+      animationIn: "bounce",
+      animationOut: "fade",
+    });
+    console.log("Hello woprld")
+  }}
+>
+  Add To Cart
+</button>
+
         </div>
       </div>
+      {toastComponent}
     </div>
   );
 };

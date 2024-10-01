@@ -5,6 +5,7 @@ import { ProductDetails } from "../../components/indext";
 import { groq } from "next-sanity";
 import { client } from "@/sanity/lib/client";
 import { Product } from "@/app/components/Card";
+import Loader from "@/app/components/loader";
 
 const ProductPage = () => {
   const { slug } = useParams(); // useParams must be inside a React component
@@ -25,7 +26,7 @@ const ProductPage = () => {
   }, [slug]);
 
   // Loading state if the product hasn't been fetched yet
-  if (!product) return <div>Loading...</div>;
+  if (!product) return <Loader/>;
 
   // Once the product is fetched, render the product details
   return <ProductDetails product={product} />;

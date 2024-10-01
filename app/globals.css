@@ -76,7 +76,7 @@
 }
 
 .add-to-cart{
-  @apply hover:bg-black  hover:text-white;
+  @apply hover:bg-black text-black bg-transparent transition-all duration-500 hover:text-white;
 }
 
 /* NEW PRODUCT DETAILS ENDS */
@@ -148,7 +148,7 @@
 }
 
 .product-Image-amination{
-  @apply transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110  duration-300
+  @apply transition ease-in-out shadow-gray-500 shadow-lg hover:shadow-2xl hover:shadow-black delay-150 hover:-translate-y-2 hover:scale-105  duration-500
 }
 
 .item-desc .flex{
